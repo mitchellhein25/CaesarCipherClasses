@@ -1,0 +1,119 @@
+
+/**
+ * This program takes a phrase and uses the Caesar Cipher to encrypt it. 
+ * One method uses a single key to shift the alphabet, while another method uses 2 different keys to change the odd or even indexed values.
+ * 
+ * @author (Mitchell Hein) 
+ * @Date (5/20/20-5/21/20)
+ */
+import edu.duke.*;
+
+public class UsingCaesarCipher {
+    public String shiftedAlphabet (String alphabet, int key) {
+        String alphaA = alphabet.substring(key);
+        String alphaB = alphabet.substring(0, key);
+        String shAlpha = alphaA + alphaB;
+        return shAlpha;
+    }
+  
+    public String encrypt (String input, int key) {
+        
+        StringBuilder buildString = new StringBuilder(input);
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lAlphabet = alphabet.toLowerCase();
+        String shAlpha = shiftedAlphabet(alphabet, key);
+        String lshAlpha = shAlpha.toLowerCase();
+        StringBuilder lowShiftedAlpha = new StringBuilder(lshAlpha);
+        StringBuilder shiftedAlpha = new StringBuilder(shAlpha);
+        for (int i = 0; i < input.length(); i++) {
+            char startC = buildString.charAt(i);
+            //System.out.println(startC);
+            int indexU = alphabet.indexOf(startC);
+            int indexL = lAlphabet.indexOf(startC);
+            //System.out.println(indexL);
+            if (indexU != -1) {
+                char newC = shiftedAlpha.charAt(indexU);
+                //System.out.println("indexU " + newC);
+                buildString.setCharAt(i, newC);
+            }
+           if (indexL != -1) {
+                char newC = lowShiftedAlpha.charAt(indexL);
+                //System.out.println("indexL " + newC);
+                buildString.setCharAt(i, newC);
+            }
+        
+        }
+        String finalEncrypted = buildString.toString();
+        return finalEncrypted;
+    }
+
+    
+    public String encryptTwoKeys (String input, int key1, int key2) {
+        StringBuilder buildString = new StringBuilder(input);
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lAlphabet = alphabet.toLowerCase();
+        
+        String shAlpha1 = shiftedAlphabet(alphabet, key1);
+        String lshAlpha1 = shAlpha1.toLowerCase();
+        StringBuilder lowShiftedAlpha1 = new StringBuilder(lshAlpha1);
+        StringBuilder shiftedAlpha1 = new StringBuilder(shAlpha1);
+       
+        String shAlpha2 = shiftedAlphabet(alphabet, key2);
+        String lshAlpha2 = shAlpha2.toLowerCase();
+        StringBuilder lowShiftedAlpha2 = new StringBuilder(lshAlpha2);
+        StringBuilder shiftedAlpha2 = new StringBuilder(shAlpha2);
+        for (int i = 0; i < input.length(); i+=2) {
+            char startC = buildString.charAt(i);
+            //System.out.println(startC);
+            int indexU = alphabet.indexOf(startC);
+            int indexL = lAlphabet.indexOf(startC);
+            //System.out.println(indexL);
+            if (indexU != -1) {
+                char newC = shiftedAlpha1.charAt(indexU);
+                //System.out.println("indexU " + newC);
+                buildString.setCharAt(i, newC);
+            }
+           if (indexL != -1) {
+                char newC = lowShiftedAlpha1.charAt(indexL);
+                //System.out.println("indexL " + newC);
+                buildString.setCharAt(i, newC);
+            }
+        
+        }
+        for (int i = 1; i < input.length(); i+=2) {
+            char startC = buildString.charAt(i);
+            //System.out.println(startC);
+            int indexU = alphabet.indexOf(startC);
+            int indexL = lAlphabet.indexOf(startC);
+            //System.out.println(indexL);
+            if (indexU != -1) {
+                char newC = shiftedAlpha2.charAt(indexU);
+                //System.out.println("indexU " + newC);
+                buildString.setCharAt(i, newC);
+            }
+           if (indexL != -1) {
+                char newC = lowShiftedAlpha2.charAt(indexL);
+                //System.out.println("indexL " + newC);
+                buildString.setCharAt(i, newC);
+            }
+        
+        }
+        String finalEncrypted = buildString.toString();
+        return finalEncrypted;
+    }
+    
+    public void testEncryptTwoKeys () {
+        System.out.println(encryptTwoKeys("At noon be in the conference room with your hat on for a surprise party. YELL LOUD!", 8, 21));
+    }
+    
+    public void testCaesar (int key) {
+        FileResource fr = new FileResource();
+        String message = fr.asString();
+        String encrypted = encrypt(message, key);
+        System.out.println("key is " + key + "\n" + encrypted);
+    }
+    
+    public void testEncrypt () {
+    System.out.println(encrypt("Laer. My necessaries are embark'd. Farewell. And, sister, as the winds give benefit", 12));
+    }
+}
