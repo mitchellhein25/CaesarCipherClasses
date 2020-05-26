@@ -1,0 +1,111 @@
+
+/**
+ * This method decrypts an encrypted method that used the Caesar Cipher to encrypt.
+ * It can Decrypt a message using 1 or 2 keys.
+ * 
+ * @author (Mitchell Hein) 
+ * @date (5/21/20)
+ */
+
+
+import edu.duke.*;
+
+public class DecryptingCaesarCipher {
+    
+    public int[] countLetters(String encrypted) {
+        int [] freqs = new int[26];
+        String uencrypted = encrypted.toUpperCase();
+        String alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder alphsb = new StringBuilder(alph);
+        StringBuilder sb = new StringBuilder(uencrypted);
+        for (int k = 0; k < sb.length(); k++) {
+            char c = sb.charAt(k);
+            //System.out.println(c + "\t");
+            for (int i = 0; i < alph.length(); i++) {
+                if (c == alphsb.charAt(i)) {
+                    freqs[i]++;
+                }
+            }
+        }
+        //for (int k = 0; k < alph.length(); k++) {
+        //    System.out.println(k + " " + freqs[k]);
+        //}
+     
+      return freqs;
+    }
+   
+    public int indexOfMax (int[] freqs) {
+        int maxIndex = 0;
+        int maxFreq = 0;
+        for (int k = 0; k < freqs.length; k++) {
+            if (freqs[k] > maxFreq) {
+                maxFreq = freqs[k];
+                maxIndex = k;
+            }
+        }
+        //System.out.println("Max index is " + maxIndex);
+        //System.out.println(freqs[maxIndex]);
+        return maxIndex;
+    }
+    
+    public String decryptOneKey (String encrypted) {
+        UsingCaesarCipher cc = new UsingCaesarCipher();
+        int [] freqs = countLetters(encrypted);
+        int maxDex = indexOfMax(freqs);
+        int dkey = maxDex - 4;
+        if (maxDex < 4) {
+            dkey = 26 - (4 - maxDex);
+        }
+        String message = cc.encrypt(encrypted, 26-dkey);
+        return message;
+    }
+    
+    public String halfOfString (String encrypted, int start) {
+        StringBuilder sb = new StringBuilder(encrypted);
+        StringBuilder newSb = new StringBuilder("");
+        for (int k = start; k < sb.length(); k += 2) {
+            char c = sb.charAt(k);
+            newSb.append(c);
+        }
+        String finalString = newSb.toString();
+        return finalString;
+    } 
+    
+    public int getKey (String s) {
+        int[] countLetters = countLetters(s);
+        int maxDex = indexOfMax(countLetters);
+        int dKey = maxDex - 4;
+        if (maxDex < 4) {
+            dKey = 26 - (4 - maxDex);
+        }
+        return dKey;
+    }
+    
+    public String decryptTwoKeys (String encrypted) {
+        UsingCaesarCipher cc = new UsingCaesarCipher();
+        String firstHalfString = halfOfString(encrypted, 0);
+        int firstHalfKey = getKey(firstHalfString);
+        String secondHalfString = halfOfString(encrypted, 1);
+        int secondHalfKey = getKey(secondHalfString);
+        System.out.println("Key 1 is " + firstHalfKey);
+        System.out.println("Key 2 is " + secondHalfKey);
+        
+        String message = cc.encryptTwoKeys(encrypted, 26-firstHalfKey, 26-secondHalfKey);
+        return message;
+    }
+    
+    public void testDecryptTwoKeys () {
+        FileResource fr = new FileResource();
+        String s = fr.asString();
+        System.out.println(decryptTwoKeys(s));
+    }
+    
+    public void testHalfOfString () {
+        System.out.println(halfOfString("Qbkm Zgis", 0));
+        System.out.println(halfOfString("Qbkm Zgis", 1));
+    }
+   
+    public void testDecryptOneKey () {
+        System.out.println(decryptOneKey("Aptg. Bn ctrthhpgxth pgt tbqpgz's. Upgtltaa. Pcs, hxhitg, ph iwt lxcsh vxkt qtctuxi"));
+    }
+}
