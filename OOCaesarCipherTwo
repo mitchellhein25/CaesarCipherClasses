@@ -1,0 +1,91 @@
+
+/**
+ * This class uses the Caesar Cipher to encrypt a message using 2 keys.
+ * This class is more object oriented than the other one, hence the OO prefix. 
+ * It utilizes a constructor.
+ * 
+ * @author (Mitchell Hein) 
+ * @date (5/25/20)
+ */
+
+import edu.duke.*;
+
+public class OOCaesarCipherTwo {
+    private String alphabet;
+    private String lowAlphabet;
+    private String shiftedAlphabet1;
+    private String lowShiftedAlphabet1;
+    private String shiftedAlphabet2;
+    private String lowShiftedAlphabet2;
+    private int mainKey1;
+    private int mainKey2;
+    public OOCaesarCipherTwo (int key1, int key2) {
+        mainKey1 = key1;
+        mainKey2 = key2;
+                  //01234567890123456789012345
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        lowAlphabet = alphabet.toLowerCase();
+        shiftedAlphabet1 = alphabet.substring(key1) + alphabet.substring(0, key1);
+        lowShiftedAlphabet1 = shiftedAlphabet1.toLowerCase();
+        shiftedAlphabet2 = alphabet.substring(key2) + alphabet.substring(0, key2);
+        lowShiftedAlphabet2 = shiftedAlphabet2.toLowerCase();
+    }
+    
+    public String encrypt (String input) {
+        
+        StringBuilder sbInput = new StringBuilder(input);
+        String encryptedInput = null;
+        StringBuilder sbU1Shifted = new StringBuilder(shiftedAlphabet1);
+        StringBuilder sbL1Shifted = new StringBuilder(lowShiftedAlphabet1);
+        for (int k = 0; k < input.length(); k+=2) {
+            char oldC = sbInput.charAt(k);
+            //System.out.println(oldC);
+            int indexU = alphabet.indexOf(oldC);
+            int indexL = lowAlphabet.indexOf(oldC);
+            //System.out.println(index);
+            if (indexU != -1) {
+            char newC = sbU1Shifted.charAt(indexU);
+            //System.out.println(newC);
+            sbInput.setCharAt(k, newC);
+            //System.out.println(sbInput);
+        }
+        if (indexL != -1) {
+            char newC = sbL1Shifted.charAt(indexL);
+            //System.out.println(newC);
+            sbInput.setCharAt(k, newC);
+            //System.out.println(sbInput);
+        }
+        }
+        StringBuilder sbU2Shifted = new StringBuilder(shiftedAlphabet2);
+        StringBuilder sbL2Shifted = new StringBuilder(lowShiftedAlphabet2);
+        for (int k = 1; k < input.length(); k+=2) {
+            char oldC = sbInput.charAt(k);
+            //System.out.println(oldC);
+            int indexU = alphabet.indexOf(oldC);
+            int indexL = lowAlphabet.indexOf(oldC);
+            //System.out.println(index);
+            if (indexU != -1) {
+            char newC = sbU2Shifted.charAt(indexU);
+            //System.out.println(newC);
+            sbInput.setCharAt(k, newC);
+            //System.out.println(sbInput);
+        }
+        if (indexL != -1) {
+            char newC = sbL2Shifted.charAt(indexL);
+            //System.out.println(newC);
+            sbInput.setCharAt(k, newC);
+            //System.out.println(sbInput);
+        }
+        }
+        
+        encryptedInput = sbInput.toString();
+        //System.out.println(encryptedInput);
+        return encryptedInput;
+    }
+    
+    public String decrypt (String input) {
+        OOCaesarCipherTwo cc = new OOCaesarCipherTwo(26-mainKey1, 26-mainKey2);
+        String decryptedInput = cc.encrypt(input);
+        return decryptedInput;
+    }
+}
