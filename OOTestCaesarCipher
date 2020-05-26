@@ -1,0 +1,65 @@
+
+/**
+ * This Class tests the CaesarCipher Class and can find an unknown key to crack the Caesar Cipher for Ciphers w/ 1 key.
+ * 
+ * @author (Mitchell Hein) 
+ * @date (5/25/20)
+ */
+
+import edu.duke.*;
+
+public class OOTestCaesarCipher {
+    public int[] countLetters (String input) {
+        int[] lettersCount = new int[26];
+        String uinput = input.toUpperCase();
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder sbAlphabet = new StringBuilder(alphabet);
+        
+        for (int k = 0; k < input.length(); k++) {
+            StringBuilder sbInput = new StringBuilder(uinput);
+            char c = sbInput.charAt(k);
+            for (int i = 0; i < alphabet.length(); i++) {
+                if (c == sbAlphabet.charAt(i)) {
+                    lettersCount[i]++;
+                }
+            }
+        }
+        return lettersCount;
+    }
+    
+    public int maxIndex (int[] lettersCount) {
+        int maxIndex = 0;
+        int maxCount = 0;
+        for (int k = 0; k < lettersCount.length; k++) {
+            
+            if (lettersCount[k] > maxCount)  {
+                maxCount = lettersCount[k];
+                maxIndex = k;
+            }
+        }
+        return maxIndex;
+    }
+    
+    public void simpleTests () {
+        /*FileResource fr = new FileResource();
+        String s = fr.asString();
+        System.out.println(s);*/
+        OOCaesarCipher cc = new OOCaesarCipher(15);
+        String encrypted = cc.encrypt("Can you imagine life WITHOUT the internet AND computers in your pocket?");
+        System.out.println(encrypted);
+        //String decrypted = cc.decrypt(encrypted);
+        //System.out.println(decrypted);*/
+        //breakCaesarCipher(encrypted);
+    }
+    
+    public void breakCaesarCipher (String input) {
+        int maxIndex = maxIndex(countLetters(input));
+        int key = maxIndex - 4;
+        if (maxIndex < 4) {
+            key = 26 - (4 - maxIndex);
+        }
+        OOCaesarCipher cc = new OOCaesarCipher(key);
+        String decrypted = cc.decrypt(input);
+        System.out.println(decrypted);
+    }
+}
