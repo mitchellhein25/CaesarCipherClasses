@@ -1,0 +1,83 @@
+
+/**
+ * This Class tests the CaesarCipher Class and can find an unknown key to crack the Caesar Cipher for Ciphers w/ 2 keys.
+ *
+ * @author (Mitchell Hein) 
+ * @date (5/26/20)
+ */
+
+import edu.duke.*;
+
+public class testOOCaesarCipherTwo {
+    public String halfOfString (String encrypted, int start) {
+        StringBuilder sb = new StringBuilder(encrypted);
+        StringBuilder newSb = new StringBuilder("");
+        for (int k = start; k < sb.length(); k += 2) {
+            char c = sb.charAt(k);
+            newSb.append(c);
+        }
+        String finalString = newSb.toString();
+        return finalString;
+    } 
+    
+    public int[] countLetters (String input) {
+        int[] lettersCount = new int[26];
+        String uinput = input.toUpperCase();
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder sbAlphabet = new StringBuilder(alphabet);
+        
+        for (int k = 0; k < input.length(); k++) {
+            StringBuilder sbInput = new StringBuilder(uinput);
+            char c = sbInput.charAt(k);
+            for (int i = 0; i < alphabet.length(); i++) {
+                if (c == sbAlphabet.charAt(i)) {
+                    lettersCount[i]++;
+                }
+            }
+        }
+        return lettersCount;
+    }
+    
+    public int maxIndex (int[] lettersCount) {
+        int maxIndex = 0;
+        int maxCount = 0;
+        for (int k = 0; k < lettersCount.length; k++) {
+            
+            if (lettersCount[k] > maxCount)  {
+                maxCount = lettersCount[k];
+                maxIndex = k;
+            }
+        }
+        return maxIndex;
+    }
+    
+    public void breakCaesarCipher (String input) {
+        String input1 = halfOfString(input, 0);
+        String input2 = halfOfString(input, 1);
+        int maxIndex1 = maxIndex(countLetters(input1));
+        int maxIndex2 = maxIndex(countLetters(input2));
+        int key1 = maxIndex1 - 4;
+        if (maxIndex1 < 4) {
+            key1 = 26 - (4 - maxIndex1);
+        }
+        int key2 = maxIndex2 - 4;
+        if (maxIndex1 < 4) {
+            key2 = 26 - (4 - maxIndex2);
+        }
+        System.out.println("key 1 is " + key1 + " and key 2 is " + key2);
+        OOCaesarCipherTwo cc = new OOCaesarCipherTwo(key1, key2);
+        String decrypted = cc.decrypt(input);
+        System.out.println(decrypted);
+    }
+    
+    public void simpleTests () {
+        FileResource fr = new FileResource();
+        String s = fr.asString();
+        //OOCaesarCipherTwo cc = new OOCaesarCipherTwo(14, 24);
+        //String encrypted = cc.encrypt("Hfs cpwewloj loks cd Hoto kyg Cyy.");
+        //System.out.println(encrypted);
+        //String decrypted = cc.decrypt("Hfs cpwewloj loks cd Hoto kyg Cyy.");
+        //System.out.println(decrypted);
+        breakCaesarCipher(s);
+    }
+}
