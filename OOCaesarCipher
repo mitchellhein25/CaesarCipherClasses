@@ -1,0 +1,65 @@
+
+/**
+ * This class uses the Caesar Cipher to encrypt a message using 1 or 2 keys.
+ * This class is more object oriented than the other one, hence the OO prefix. 
+ * It utilizes a constructor.
+ * 
+ * @author (Mitchell Hein) 
+ * @date (5/25/20)
+ */
+import edu.duke.*;
+
+public class OOCaesarCipher {
+    private String alphabet;
+    private String lowAlphabet;
+    private String shiftedAlphabet;
+    private String lowShiftedAlphabet;
+    
+    private int mainKey;
+    public OOCaesarCipher (int key) {
+        mainKey = key;
+                  //12345678901234567890123456  
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        lowAlphabet = alphabet.toLowerCase();
+        shiftedAlphabet = alphabet.substring(key) + alphabet.substring(0, key);
+        lowShiftedAlphabet = shiftedAlphabet.toLowerCase();
+        //System.out.println(shiftedAlphabet);
+    }
+    
+    public String encrypt (String input) {
+        
+        StringBuilder sbUShifted = new StringBuilder(shiftedAlphabet);
+        StringBuilder sbLShifted = new StringBuilder(lowShiftedAlphabet);
+        StringBuilder sbInput = new StringBuilder(input);
+        String encryptedInput = null;
+        for (int k = 0; k < input.length(); k++) {
+            char oldC = sbInput.charAt(k);
+            //System.out.println(oldC);
+            int indexU = alphabet.indexOf(oldC);
+            int indexL = lowAlphabet.indexOf(oldC);
+            //System.out.println(index);
+            if (indexU != -1) {
+            char newC = sbUShifted.charAt(indexU);
+            //System.out.println(newC);
+            sbInput.setCharAt(k, newC);
+            //System.out.println(sbInput);
+        }
+        if (indexL != -1) {
+            char newC = sbLShifted.charAt(indexL);
+            //System.out.println(newC);
+            sbInput.setCharAt(k, newC);
+            //System.out.println(sbInput);
+        }
+        }
+        encryptedInput = sbInput.toString();
+        //System.out.println(encryptedInput);
+        return encryptedInput;
+    }
+    
+    public String decrypt (String input) {
+        OOCaesarCipher cc = new OOCaesarCipher(26-mainKey);
+        String decryptedInput = cc.encrypt(input);
+        return decryptedInput;
+    }
+     
+}
